@@ -2,34 +2,38 @@ import sys
 import yaml
 import os
 
+DICT_DIR = "data/dict"
+HETERO_DIR = "data/heteronym"
 
 def get_dict():
     tone = {1: " ", 2: "ˊ", 3: "ˇ", 4: "ˋ", 5: "˙"}
     dict = {}
-    for fname in os.listdir("dict"):
-        f = open("dict/" + fname)
+    ymls = [fname for fname in os.listdir(DICT_DIR) if fname.endswith(".yml")]
+    ymls.sort()
+    for y in ymls:
+        y_path = os.path.join(DICT_DIR, y)
+        f = open(y_path)
         yml = yaml.safe_load(f)
         for chewing in yml:
             for keytone in yml[chewing]:
                 words = yml[chewing][keytone]
                 val = chewing + tone[keytone]
                 for word in words:
-                    dict[word] = val
+                    if word in dict:
+                        dict[word].append(val)
+                    else:
+                        dict[word] = [val]
         f.close()
     return dict
 
 
 def main(argv):
     dict = get_dict()
-    result = ""
-    for word in argv[1]:
-        if word in dict:
-            result += dict[word]
-        else:
-            result += word
-    print(result)
+    for key in dict:
+        if len(dict[key]) > 1:
+            print(f"{key}: {dict[key]}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 0:
         main(sys.argv)
