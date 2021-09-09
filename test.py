@@ -2,16 +2,12 @@ import sys
 import yaml
 import os
 
-DICT_DIR = "data"
-
 
 def get_dict():
     tone = {1: " ", 2: "ˊ", 3: "ˇ", 4: "ˋ", 5: "˙"}
     dict = {}
-    ymls = [fname for fname in os.listdir(DICT_DIR) if fname.endswith(".yml")]
-    for y in ymls:
-        y_path = os.path.join(DICT_DIR, y)
-        f = open(y_path)
+    for fname in os.listdir("dict"):
+        f = open("dict/" + fname)
         yml = yaml.safe_load(f)
         for chewing in yml:
             for keytone in yml[chewing]:
