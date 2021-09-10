@@ -3,7 +3,8 @@ import yaml
 import os
 
 DICT_DIR = "data/dict"
-HETERO_DIR = "data/heteronym"
+HETERO_DIR = "data"
+
 
 def get_dict():
     tone = {1: " ", 2: "ˊ", 3: "ˇ", 4: "ˋ", 5: "˙"}
@@ -24,14 +25,22 @@ def get_dict():
                     else:
                         dict[word] = [val]
         f.close()
+
+    # Reorder by frequently-used pronounciations in HETERO_DIR
+    h_path = os.path.join(HETERO_DIR, "heteronym.yml")
+    f = open(h_path)
+    yml = yaml.safe_load(f)
+    for key in yml:
+        dict[key] = yml[key]
+    f.close()
+
     return dict
 
 
 def main(argv):
     dict = get_dict()
-    for key in dict:
-        if len(dict[key]) > 1:
-            print(f"{key}: {dict[key]}")
+    for word in argv[1]:
+        print(f"{word}: {dict[word]}")
 
 
 if __name__ == "__main__":
