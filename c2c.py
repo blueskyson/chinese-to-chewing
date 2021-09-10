@@ -48,6 +48,8 @@ def get_trie(dict):
     t = trie.Trie()
     for key in yml:
         chewing = ""
+        # for debug
+        # print(key)
         for i, c in enumerate(key, start=0):
             idx = int(yml[key][i])
             chewing += dict[c][idx]
@@ -66,7 +68,11 @@ def main(argv):
     index = 0  # current index in while loop
 
     while index < slen:
-        tup = t.match(argv[1], index)
+        if s[index] not in dict:
+            result += s[index]
+            index = index + 1
+            continue
+        tup = t.match(s, index)
 
         # Doesn't match any special case
         if tup[0] is None:

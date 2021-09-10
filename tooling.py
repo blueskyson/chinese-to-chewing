@@ -40,7 +40,10 @@ def get_dict():
 def main(argv):
     dict = get_dict()
     for word in argv[1]:
-        print(f"{word}: {dict[word]}")
+        if word not in dict:
+            print(word)
+        else:
+            print(f"{word}: {dict[word]}")
 
 
 if __name__ == "__main__":
